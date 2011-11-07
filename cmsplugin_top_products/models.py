@@ -8,4 +8,4 @@ from shop.models.productmodel import Product
 class TopProducts(CMSPlugin):
     products = models.ManyToManyField(Product, verbose_name=_('products'), blank=True, null=True,
         help_text=_('Shows the selected products.'))
-    
+
