@@ -6,8 +6,8 @@ def read(fname):
 
 setup(
     name = "cmsplugin-shop",
-    version = "0.0.0",
-    url = 'http://github.com/chrisglass/cmsplugin-shop',
+    version = "0.0.1",
+    url = 'http://github.com/airtonix/cmsplugin-shop',
     license = 'BSD',
     description = "django CMS plugin for django SHOP",
     author = 'Christopher Glass',
@@ -29,4 +29,3 @@ setup(
     include_package_data=True,
     zip_safe = False
 )
-

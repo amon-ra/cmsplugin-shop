@@ -1,0 +1,5 @@
+<div class="cmsplugin cmsplugin_shop plugin-featured-product">
+{% for product in Products %}
+  {% include plugin.instance.item_template with Item=product %}
+{% endfor %}
+</div>

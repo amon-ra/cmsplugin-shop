@@ -1,0 +1,5 @@
+{% load data_types %}
+<div class="product slide">
+  <h4><a href="{% url product_detail Item.slug %}">{{ Item.name }}</a>
+    <small>{{ Item.get_price|currency }}</small></h4>
+</div>
