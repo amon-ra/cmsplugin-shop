@@ -6,16 +6,17 @@ def read(fname):
 
 setup(
     name = "cmsplugin-shop",
-    version = "0.0.1",
+    version = "0.0.2",
     url = 'http://github.com/airtonix/cmsplugin-shop',
     license = 'BSD',
     description = "django CMS plugin for django SHOP",
-    author = 'Christopher Glass',
-    author_email = 'tribaal@gmail.com',
+    author = 'Zenobius Jiricek',
+    author_email = 'airtonix@gmail.com',
     packages = find_packages(),
     install_requires=[
         'django-cms',
         'django-shop',
+        'django-tinymce',
     ],
     classifiers = [
         'Development Status :: 4 - Beta',
