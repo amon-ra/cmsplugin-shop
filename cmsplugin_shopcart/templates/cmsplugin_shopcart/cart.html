@@ -1,3 +1,65 @@
-<div class="cmsplugin cmsplugin_shop plugin-cart">
-  <div class="plugin-cart">{{ cart }}</div>
+{% load sekizai_tags %}
+{% load debug data_types %}
+{% load i18n humanize %}
+
+{% addtoblock 'js' %}<script src="{{ STATIC_URL }}/js/jquery.djangoshop-cart.js"></script>{% endaddtoblock %}
+
+<div class="cmsplugin cmsplugin_shop plugin-shopcart">
+    <h4>Your Shopping Cart
+      <small>{{ cart.total_quantity }} item{{ cart.total_quantity|pluralize }}</small>
+    </h4>
+    {% if cart.items.all|length > 0 %}
+    <div class='cart-items'>
+      {% for item in cart.items.all %}
+      <div class="product product-active-{{ Product.active }}"
+           data-product-slug="{{ item.product.slug }}"
+           data-product-active="{{ item.product.active }}">
+        <div class="detail">
+
+          <div class="remove-from-cart">
+            <a class="btn" href="{% url cart_item_delete item.id %}?next={{ request.path }}">
+              <img src="{{ STATIC_URL }}/img/icons/cart_delete.png" alt="{% trans 'Remove' %}"/>
+            </a>
+          </div>
+
+          <div class="title">
+            <a href="{% url product_detail item.product.slug %}">
+              {{ item.product.name }}</a>
+              <small>{% if not Category %}{{ item.product.type }}{% endif %}</small>
+          </div>
+
+          <div class="unit-price">{{ item.product.get_price|currency }}</div>
+        </div>
+
+      </div>
+      {% endfor %}
+    </div>
+    {% if cart.cartdiscountcode_set %}
+    {% with discounts_count=cart.cartdiscountcode_set.count %}
+    {% if discounts_count > 0 %}
+    <div class="discounts">
+      <h5>Discounts
+        <small>{{ discounts_count }} discount{{ discounts_count|pluralize }} applicable</small>
+      </h5>
+      {{ cart.cartdiscountcode_set.all }}
+    </div>
+    {% endif %}
+    {% endwith %}
+    {% endif %}
+    <div class="totals">
+      <div class="subtotal-price">
+        {{ cart.subtotal_price|currency }}
+      </div>
+      <div class="extras">
+        {% for item in cart.extra_price_fields %}
+        <div class="extra-item">{{ item.0 }} <span>{{ item.1|currency }}</span></div>
+        {% endfor %}
+      </div>
+      <div class="total-price">
+        {{ cart.total_price|currency }}
+      </div>
+    </div>
+    {% else %}
+        <div class="empty">Your shopping cart is empty</div>
+    {% endif %}
 </div>
