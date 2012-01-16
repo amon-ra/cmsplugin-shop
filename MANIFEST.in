@@ -1,0 +1,3 @@
+include *.html *.rst README LICENSE INSTALL
+recursive-include templates *.html *.py
+recursive-include migrations *.py
