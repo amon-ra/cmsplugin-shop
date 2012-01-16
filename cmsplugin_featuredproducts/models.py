@@ -20,6 +20,8 @@ class ApplicationSettings(AppConf):
     FEATUREDITEMS_ITEM_TEMPLATES = "cmsplugin_featuredproducts/item"
 
 class FeaturedProductSettings(CMSPlugin):
+    title = models.CharField(max_length = 128, default="Featured Products")
+
     products = models.ManyToManyField("shop.Product",
       help_text=_('Which Products to promote'))
 

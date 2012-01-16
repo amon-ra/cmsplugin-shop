@@ -1,5 +1,6 @@
 <div class="cmsplugin cmsplugin_shop plugin-featured-products featured-product-slider slider"
-     data-slide-selector='.plugin-featured-product-slider .product'>
+     data-slide-selector='.plugin-featured-product-slider .product' data-title='{{ plugin.instance.title }}'>
+       <h3>{{ plugin.instance.title }}</h3>
 {% for product in Products %}
   {% include plugin.instance.item_template with Item=product %}
 {% endfor %}

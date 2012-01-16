@@ -1,0 +1,11 @@
+{% load userorders_tags %}
+<div class="cmsplugin cmsplugin_shop plugin-userorders">
+  <h3>{{ plugin.instance.title }}</h3>
+  {% user_orders as Orders %}
+    {% for order in Orders %}
+      {% include plugin.instance.item_template with Item=order %}
+    {% empty %}
+      {{ plugin.instance.empty_text|safe }}
+    {% endfor %}
+  {% enduser_orders %}
+</div>

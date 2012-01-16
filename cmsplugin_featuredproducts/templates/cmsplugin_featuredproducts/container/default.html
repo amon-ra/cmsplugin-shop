@@ -1,4 +1,5 @@
 <div class="cmsplugin cmsplugin_shop plugin-featured-product">
+  <h3>{{ plugin.instance.title }}</h3>
 {% for product in Products %}
   {% include plugin.instance.item_template with Item=product %}
 {% endfor %}
