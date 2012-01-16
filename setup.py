@@ -17,7 +17,7 @@ setup(
         'django-cms',
         'django-shop',
         'django-tinymce',
-        'django-classytags'
+        'django-classy-tags'
     ],
     classifiers = [
         'Development Status :: 4 - Beta',
