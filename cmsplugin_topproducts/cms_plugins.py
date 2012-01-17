@@ -6,7 +6,10 @@ from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
-from shop.models import OrderItem
+from shop.models import (
+  Product,
+  OrderItem
+)
 
 from cmsplugin_topproducts.models import TopSellingProductsSettings
 
@@ -16,6 +19,7 @@ class TopProductsPlugin(CMSPluginBase):
     admin_preview = False
     name = title(_('DjangoShop: Top Selling Products'))
     render_template = "cmsplugin_topproducts/top_products.html"
+
 
     def render(self, context, instance, placeholder):
         """This is the main rendering function. We "simply" query the
@@ -66,5 +70,4 @@ class TopProductsPlugin(CMSPluginBase):
             'Products': top_products_list,
         })
         return context
-
 plugin_pool.register_plugin(TopProductsPlugin)
