@@ -6,7 +6,7 @@ def read(fname):
 
 setup(
     name = "cmsplugin-shop",
-    version = "0.0.2",
+    version = "0.0.4",
     url = 'http://github.com/airtonix/cmsplugin-shop',
     license = 'BSD',
     description = "django CMS plugin for django SHOP",
