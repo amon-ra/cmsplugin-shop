@@ -1,4 +1,4 @@
-include *.html *.rst README LICENSE INSTALL
+include *.rst
 recursive-include cmsplugin_shopcart/templates *.html
 recursive-include cmsplugin_featuredproducts/templates *.html
 recursive-include cmsplugin_topproducts/templates *.html
