@@ -1,2 +1,5 @@
 include *.html *.rst README LICENSE INSTALL
-recursive-include *.html *.py
+recursive-include cmsplugin_shop/templates/*.html
+recursive-include cmsplugin_shopcart/templates/*.html
+recursive-include cmsplugin_topproducts/templates/*.html
+recursive-include cmsplugin_userorders/templates/*.html
