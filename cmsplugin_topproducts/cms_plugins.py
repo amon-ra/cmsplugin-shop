@@ -28,8 +28,9 @@ class TopProductsPlugin(CMSPluginBase):
 
         top_products_data = OrderItem.objects.values(
         'product_reference').annotate(
-            product_count=Count('product_reference')
-          ).order_by('product_count')[:instance.count]
+                product_count=Count('product_reference')
+            ).distinct('product_reference') \
+            .order_by('product_count')
 
         # For Future Quick Reference :
         # The top_products_data result should be in the form:
@@ -43,14 +44,19 @@ class TopProductsPlugin(CMSPluginBase):
 
         top_products_list = []
         for values in top_products_data:
+            if len(top_products_list) >= instance.count:
+                break
             id_references = values.get('product_reference')
             total = values.get('product_count')
-            products = Product.objects.get(pk=id_references)
+            try:
+                product = Product.objects.get(id=id_references)
 
-            top_products_list.append({
-              'object': products,
-              'count' : total
-            })
+                top_products_list.append({
+                  'object': product,
+                  'count' : total
+                })
+            except Product.DoesNotExist:
+                pass
 
         # TODO: Cache top_products_list, invalidate on new order (or just
         # periodically maybe, it's not critical). Should be cached per
