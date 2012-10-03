@@ -2,7 +2,6 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.defaultfilters import title
 from django.db.models import Count
 
-from cms.models.pluginmodel import CMSPlugin
 from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
@@ -22,14 +21,16 @@ class TopProductsPlugin(CMSPluginBase):
 
 
     def render(self, context, instance, placeholder):
-        """This is the main rendering function. We "simply" query the
+        """
+        This is the main rendering function. We "simply" query the
         database to get the top N products (as defined in the plugin
-        instance), and pass them to the context"""
+        instance), and pass them to the context
+        """
 
-        top_products_data = OrderItem.objects.values(
-        'product_reference').annotate(
-                product_count=Count('product_reference')
-            ).distinct('product_reference') \
+        top_products_data = OrderItem.objects \
+            .values('product_reference') \
+            .annotate(product_count=Count('product_reference')) \
+            .distinct('product_reference') \
             .order_by('product_count')
 
         # For Future Quick Reference :
@@ -44,19 +45,18 @@ class TopProductsPlugin(CMSPluginBase):
 
         top_products_list = []
         for values in top_products_data:
-            if len(top_products_list) >= instance.count:
-                break
-            id_references = values.get('product_reference')
+            if len(top_products_list) >= instance.count: break
+            ref   = values.get('product_reference')
             total = values.get('product_count')
             try:
-                product = Product.objects.get(id=id_references)
-
-                top_products_list.append({
-                  'object': product,
-                  'count' : total
-                })
+                product = Product.objects.get(id=ref, active=True)
             except Product.DoesNotExist:
                 pass
+            else:
+                top_products_list.append({
+                    'object': product,
+                    'count' : total
+                })
 
         # TODO: Cache top_products_list, invalidate on new order (or just
         # periodically maybe, it's not critical). Should be cached per
@@ -76,4 +76,5 @@ class TopProductsPlugin(CMSPluginBase):
             'Products': top_products_list,
         })
         return context
+
 plugin_pool.register_plugin(TopProductsPlugin)
