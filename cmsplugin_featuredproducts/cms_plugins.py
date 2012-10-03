@@ -21,11 +21,13 @@ class FeaturedProductsPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """
-        This is the main rendering function. We "simply" query the database
-        to get the top N products (as defined in the plugin instance), and pass
-        them to the context
+        Return the list of products that has been picked,
+        filtered by only products that are active.
         """
 
+        products = instance.products.filter(active=True)
+
+        context.update({'Products': products})
         return context
 
 plugin_pool.register_plugin(FeaturedProductsPlugin)
