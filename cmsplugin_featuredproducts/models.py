@@ -23,23 +23,18 @@ class FeaturedProductSettings(CMSPlugin):
     title = models.CharField(max_length = 128, default="Featured Products")
 
     products = models.ManyToManyField("shop.Product",
-      help_text=_('Which Products to promote'))
+        help_text=_('Which Products to promote'))
 
-    container_template = models.CharField(choices=DynamicTemplateChoices(
-                                  path=ApplicationSettings.FEATUREDITEMS_LIST_TEMPLATES,
-                                  include='.html'),
+    container_template = models.CharField(
         max_length=256, blank=True, null=True,
+        choices=DynamicTemplateChoices(path=ApplicationSettings.FEATUREDITEMS_LIST_TEMPLATES, include='.html'),
         default = ('default', os.path.join(ApplicationSettings.FEATUREDITEMS_LIST_TEMPLATES, "default.html")),
-        help_text="""Select a template to render this
-            list. Templates are stored in : {0}""".format(
-              ApplicationSettings.FEATUREDITEMS_LIST_TEMPLATES))
+        help_text=_("Select a template to render this list. Templates are stored in : {0}").format(
+            ApplicationSettings.FEATUREDITEMS_LIST_TEMPLATES))
 
-    item_template = models.CharField(choices=DynamicTemplateChoices(
-                                  path=ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES,
-                                  include='.html'),
+    item_template = models.CharField(
         max_length=256, blank=True, null=True,
-        default = os.path.join(ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES,
-      "default.html"),
-          help_text="""Select a template to render the items in the list.
-            Templates are stored in : {0}""".format(
-              ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES))
+        choices=DynamicTemplateChoices( path=ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES, include='.html'),
+        default = os.path.join(ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES, "default.html"),
+        help_text=_("Select a template to render the items in the list. Templates are stored in : {0}").format(
+            ApplicationSettings.FEATUREDITEMS_ITEM_TEMPLATES))

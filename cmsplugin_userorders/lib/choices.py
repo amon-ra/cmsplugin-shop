@@ -1,103 +1,109 @@
+
 import os
 
-from django.contrib import admin
-from django.template.loader import get_template
 from django.template.loaders.app_directories import app_template_dirs
 from django.core.exceptions import ImproperlyConfigured
-from django.utils.importlib import import_module
 
-#import settings
-from formatting import deslugify
+from cms.models import Placeholder, Page
+
+from .formatting import deslugify
 
 class DynamicChoice(object):
-    """
-    Trivial example of creating a dynamic choice
-    """
+	"""
+	Trivial example of creating a dynamic choice
+	"""
+	blank_option = "- Not Selected -"
 
-    def __iter__(self, *args, **kwargs):
-        for choice in self.generate():
-            if hasattr(choice,'__iter__'):
-                yield (choice[0], choice[1])
-            else:
-                yield choice, choice
+	def __iter__(self, *args, **kwargs):
+		for choice in self.generate():
+			if hasattr(choice,'__iter__'):
+				yield (choice[0], choice[1])
+			else:
+				yield choice, choice
 
-    def __init__(self, *args, **kwargs):
-        """
-        If you do it here it is only initialized once. Then just return generated.
-        """
-        import random
-        self.generated = [random.randint(1,100) for i in range(10)]
+	def __init__(self, *args, **kwargs):
+		""" If you do it here it is only initialized once. Then just return generated. """
+		self.generated = range(10)
 
-    def generate(self, *args, **kwargs):
-        """
-        If you do it here it is  initialized every time the iterator is used.
-        """
-        import random
-        return [random.randint(1,100) for i in range(10)]
+	def generate(self, *args, **kwargs):
+		""" If you do it here it is  initialized every time the iterator is used. """
+		return range(10)
 
 
+class PageAttributeDynamicChoices(DynamicChoice):
+
+	def __init__(self, *args, **kwargs):
+		super(PageAttributeDynamicChoices, self).__init__(self, *args, **kwargs)
+
+	def generate(self,*args, **kwargs):
+		choices = list()
+		return choices
+
+
+class PlaceholdersDynamicChoices(DynamicChoice):
+
+	def __init__(self, *args, **kwargs):
+		super(PlaceholdersDynamicChoices, self).__init__(self, *args, **kwargs)
+
+	def generate(self,*args, **kwargs):
+		choices = list()
+		for item in Placeholder.objects.all().values("slot").distinct():
+			choices.append( (
+			item['slot'],
+			deslugify(item['slot'])
+			), )
+
+		return choices
+
+class PageIDsDynamicChoices(DynamicChoice):
+
+	def __init__(self, *args, **kwargs):
+		super(PageIDsDynamicChoices, self).__init__(self, *args, **kwargs)
+
+	def generate(self,*args, **kwargs):
+		choices = list()
+		for item in Page.objects.all():
+			if not item.reverse_id :
+				continue
+
+			choices.append( (
+			item.reverse_id,
+			"{0} [{1}]".format(item.get_title(), item.reverse_id)
+			), )
+
+		return choices
 
 class DynamicTemplateChoices(DynamicChoice):
-    path = None
 
-    # exclude templates whose name includes these keywords
-    exclude = None
+	def __init__(self, path=None, include=None, exclude=None, *args, **kwargs):
 
-    # only include templates whos name contains these keywords
-    inlude = None
+		super(DynamicTemplateChoices, self).__init__(self, *args, **kwargs)
+		self.path = path
+		self.include = include if isinstance(include, (list,tuple)) else (include,)
+		self.exclude = exclude if isinstance(include, (list,tuple)) else (exclude,)
 
-    #
-    # TODO: Scan for snippets as well.
-    #
-    # scan for and include snippets in choices?
-    #scan_snippets = False
+	def generate(self,*args, **kwargs):
+		choices = set()
+		for template_dir in app_template_dirs:
+			choices |= set(self.walkdir(os.path.join(template_dir, self.path)))
+		return choices
 
-    # snippets whose title prefixed with this moniker are considered to be
-    # templates for our cmsplugin.
+	def walkdir(self, path=None):
 
-    #snippet_title_moniker = getattr(
-    #  settings.CONFIGURABLEPRODUCT_CMSPLUGIN_SNIPPETS_MONIKER,
-    #  "[configurableproduct-snippet]")
+		if not os.path.exists(path):
+			return
 
+		for root, dirs, files in os.walk(path):
 
-    def __init__(self, path=None, include=None,
-                       exclude=None, *args, **kwargs):
+			if self.include:
+				files = filter(lambda x: self.include in x, files)
 
-        super(DynamicTemplateChoices, self).__init__(self, *args, **kwargs)
-        self.path = path
-        self.include = include
-        self.exlude = exclude
+			if self.exclude:
+				files = filter(lambda x: not self.exclude in x, files)
 
-    def generate(self,*args, **kwargs):
-        choices = list()
-        for template_dir in app_template_dirs:
-          results = self.walkdir(os.path.join(template_dir, self.path))
-          if results:
-              choices += results
-
-        return choices
-
-    def walkdir(self, path=None):
-        output = list()
-
-        if not os.path.exists(path):
-            return None
-
-        for root, dirs, files in os.walk(path):
-
-            if self.include:
-                files = filter(lambda x: self.include in x, files)
-
-            if self.exlude:
-                files = filter(lambda x: not self.exlude in x, files)
-
-            for item in files :
-                output += ( (
-                    os.path.join(self.path, item),
-                    deslugify(os.path.splitext(item)[0]),
-                ),)
-
-            for item in dirs :
-                output += self.walkdir(os.path.join(root, item))
-
-        return output
+			for item in files :
+				fragment = os.path.relpath(os.path.join(root, item), path)
+				yield (
+				os.path.join(self.path, fragment),
+				deslugify(os.path.splitext(item)[0]),
+				)

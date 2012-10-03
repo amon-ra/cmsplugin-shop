@@ -20,9 +20,11 @@ class FeaturedProductsPlugin(CMSPluginBase):
     filter_horizontal = ('products', )
 
     def render(self, context, instance, placeholder):
-        """This is the main rendering function. We "simply" query the database
+        """
+        This is the main rendering function. We "simply" query the database
         to get the top N products (as defined in the plugin instance), and pass
-        them to the context"""
+        them to the context
+        """
 
         return context
 

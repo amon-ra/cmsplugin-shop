@@ -7,4 +7,4 @@ from shop.models.productmodel import Product
 
 class TopSellingProductsSettings(CMSPlugin):
     count = models.PositiveIntegerField(_("Number of Products"),
-      help_text=_('How many top selling products to show.'))
+                help_text=_('How many top selling products to show.'))
