@@ -1,7 +1,9 @@
 {% load i18n thumbnail %}
 <div class="teaser-container">
-	<h4>{% blocktrans %}Top {{ product_count }} products{% endblocktrans %}</h4>
-	{% for product in products %}
+	<h4>{% blocktrans with count=Count %}
+		Top {{ count }} product{{ count|pluralize }}.
+	{% endblocktrans %}</h4>
+	{% for product in Products %}
 		<p class="teaser-item {% cycle 'odd' 'even' %}">
 			<a href="{{ product.get_absolute_url }}" class="clearfix">
 				{% if product.has_images %}
