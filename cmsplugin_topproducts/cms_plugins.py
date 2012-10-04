@@ -6,12 +6,11 @@ from cms.plugin_base import CMSPluginBase
 from cms.plugin_pool import plugin_pool
 
 from shop.models import (
-  Product,
-  OrderItem
+    Product,
+    OrderItem
 )
 
-from cmsplugin_topproducts.models import TopSellingProductsSettings
-
+from .models import TopSellingProductsSettings
 
 class TopProductsPlugin(CMSPluginBase):
     model = TopSellingProductsSettings
@@ -22,9 +21,8 @@ class TopProductsPlugin(CMSPluginBase):
 
     def render(self, context, instance, placeholder):
         """
-        This is the main rendering function. We "simply" query the
-        database to get the top N products (as defined in the plugin
-        instance), and pass them to the context
+        This is the main rendering function. We query the database to get the
+        top N products (as defined in the plugin instance), and filter them.
         """
 
         top_products_data = OrderItem.objects \
@@ -73,6 +71,7 @@ class TopProductsPlugin(CMSPluginBase):
         #    cmsplugin_topproducts.models.TopSellingProductsSettings
 
         context.update({
+            'Count': instance.count,
             'Products': top_products_list,
         })
         return context

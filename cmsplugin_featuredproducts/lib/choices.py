@@ -79,8 +79,8 @@ class DynamicTemplateChoices(DynamicChoice):
 
 		super(DynamicTemplateChoices, self).__init__(self, *args, **kwargs)
 		self.path = path
-		self.include = include if isinstance(include, (list,tuple)) else (include,)
-		self.exclude = exclude if isinstance(include, (list,tuple)) else (exclude,)
+		self.include = include # if isinstance(include, (list,tuple)) else (include,)
+		self.exclude = exclude # if isinstance(include, (list,tuple)) else (exclude,)
 
 	def generate(self,*args, **kwargs):
 		choices = set()
