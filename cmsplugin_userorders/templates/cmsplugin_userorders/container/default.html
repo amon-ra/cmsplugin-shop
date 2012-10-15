@@ -1,6 +1,6 @@
 {% load userorders_tags %}
 <div class="cmsplugin cmsplugin_shop plugin-userorders">
-  <h3>{{ plugin.instance.title }}</h3>
+  {% if plugin.instance.title %}<h3>{{ plugin.instance.title }}</h3>{% endif %}
   {% user_orders as Orders %}
     {% for order in Orders %}
       {% include plugin.instance.item_template with Item=order %}

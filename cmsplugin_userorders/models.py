@@ -35,25 +35,26 @@ ORDER_FIELD_CHOICES = [
 
 
 class UserOrderPluginSettings(CMSPlugin):
-    container_template = models.CharField(choices=DynamicTemplateChoices(
-                                  path=ApplicationSettings.USERORDER_LIST_TEMPLATES,
-                                  include='.html'),
-        max_length=256, blank=True, null=True,
-        default = ('default', os.path.join(ApplicationSettings.USERORDER_LIST_TEMPLATES, "default.html")),
-        help_text="""Select a template to render this
-            list. Templates are stored in : {0}""".format(
-              ApplicationSettings.USERORDER_LIST_TEMPLATES))
-    empty_text = tinymce_models.HTMLField(default="You haven't placed any orders yet.")
 
-    item_template = models.CharField(choices=DynamicTemplateChoices(
-                                  path=ApplicationSettings.USERORDER_ITEM_TEMPLATES,
-                                  include='.html'),
+    title = models.CharField(max_length=100, default=_("Your Order History"))
+
+    container_template = models.CharField(
         max_length=256, blank=True, null=True,
-        default = os.path.join(ApplicationSettings.USERORDER_ITEM_TEMPLATES,
-      "default.html"),
-          help_text="""Select a template to render the items in the list.
-            Templates are stored in : {0}""".format(
-              ApplicationSettings.USERORDER_ITEM_TEMPLATES))
+        choices=DynamicTemplateChoices(
+            path=ApplicationSettings.USERORDER_LIST_TEMPLATES, include='.html'),
+        default = os.path.join(ApplicationSettings.USERORDER_LIST_TEMPLATES, "default.html"),
+        help_text="Select a template to render this list. Templates are stored in : {0}"\
+            .format(ApplicationSettings.USERORDER_LIST_TEMPLATES))
+
+    empty_text = tinymce_models.HTMLField(default=_("You haven't placed any orders yet."))
+
+    item_template = models.CharField(
+        max_length=256, blank=True, null=True,
+        choices=DynamicTemplateChoices(
+            path=ApplicationSettings.USERORDER_ITEM_TEMPLATES, include='.html'),
+        default = os.path.join(ApplicationSettings.USERORDER_ITEM_TEMPLATES, "default.html"),
+        help_text="Select a template to render the items in the list. Templates are stored in : {0}"\
+            .format(ApplicationSettings.USERORDER_ITEM_TEMPLATES))
 
     sort_by = models.CharField(max_length=32, choices=ORDER_FIELD_CHOICES)
     filter_states = MultiSelectField(max_length=32, choices=ORDER_STATE_CHOICES, blank=True, null=False)
