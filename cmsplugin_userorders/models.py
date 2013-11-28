@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.models import model_to_dict
 
 from cms.models.pluginmodel import CMSPlugin
-from djangocms_text_ckeditor import HMTLField
+from djangocms_text_ckeditor.fields import HMTLField
 
 from shop.models import (
   Product,
