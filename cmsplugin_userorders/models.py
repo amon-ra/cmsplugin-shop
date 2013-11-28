@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.forms.models import model_to_dict
 
 from cms.models.pluginmodel import CMSPlugin
-from tinymce import models as tinymce_models
+from djangocms_text_ckeditor import HMTLField
 
 from shop.models import (
   Product,
@@ -46,7 +46,7 @@ class UserOrderPluginSettings(CMSPlugin):
         help_text="Select a template to render this list. Templates are stored in : {0}"\
             .format(ApplicationSettings.USERORDER_LIST_TEMPLATES))
 
-    empty_text = tinymce_models.HTMLField(default=_("You haven't placed any orders yet."))
+    empty_text = HTMLField(default=_("You haven't placed any orders yet."))
 
     item_template = models.CharField(
         max_length=256, blank=True, null=True,

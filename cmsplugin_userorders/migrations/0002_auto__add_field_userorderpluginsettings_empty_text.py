@@ -9,7 +9,7 @@ class Migration(SchemaMigration):
     def forwards(self, orm):
         
         # Adding field 'UserOrderPluginSettings.empty_text'
-        db.add_column('cmsplugin_userorderpluginsettings', 'empty_text', self.gf('tinymce.models.HTMLField')(default="You haven't placed any orders yet."), keep_default=False)
+        db.add_column('cmsplugin_userorderpluginsettings', 'empty_text', self.gf('djangocms_text_ckeditor.fields.HTMLField')(default="You haven't placed any orders yet."), keep_default=False)
 
 
     def backwards(self, orm):
@@ -43,7 +43,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'UserOrderPluginSettings', 'db_table': "'cmsplugin_userorderpluginsettings'", '_ormbases': ['cms.CMSPlugin']},
             'cmsplugin_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': "orm['cms.CMSPlugin']", 'unique': 'True', 'primary_key': 'True'}),
             'container_template': ('django.db.models.fields.CharField', [], {'default': "('default', 'cmsplugin_userorders/container/default.html')", 'max_length': '256', 'null': 'True', 'blank': 'True'}),
-            'empty_text': ('tinymce.models.HTMLField', [], {'default': '"You haven\'t placed any orders yet."'}),
+            'empty_text': ('djangocms_text_ckeditor.fields.HTMLField', [], {'default': '"You haven\'t placed any orders yet."'}),
             'filter_states': ('cmsplugin_userorders.fields.MultiSelectField', [], {'max_length': '32', 'blank': 'True'}),
             'item_template': ('django.db.models.fields.CharField', [], {'default': "'cmsplugin_userorders/item/default.html'", 'max_length': '256', 'null': 'True', 'blank': 'True'}),
             'sort_by': ('django.db.models.fields.CharField', [], {'max_length': '32'})

@@ -16,7 +16,7 @@ setup(
     install_requires=[
         'django-cms',
         'django-shop',
-        'django-tinymce',
+        'djangocms_text_ckeditor',
         'django-classy-tags'
     ],
     classifiers = [
